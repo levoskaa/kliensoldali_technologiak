@@ -2,10 +2,12 @@
 using Cookbook.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Template10.Mvvm;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
 namespace Cookbook.ViewModels
@@ -24,24 +26,46 @@ namespace Cookbook.ViewModels
 		public string NewComment
 		{
 			get { return _newComment; }
-			set { Set(ref _newComment, value); }
+			set
+			{
+				Set(ref _newComment, value);
+				SendCommentCommand.RaiseCanExecuteChanged();
+			}
 		}
 		private string _name;
 		public string Name
 		{
 			get { return _name; }
-			set { Set(ref _name, value); }
+			set
+			{
+				Set(ref _name, value);
+				SendCommentCommand.RaiseCanExecuteChanged();
+			}
 		}
 
 		public DelegateCommand SendCommentCommand { get; }
 
 		public DetailsPageViewModel()
 		{
-			SendCommentCommand = new DelegateCommand(SendComment);
+			SendCommentCommand = new DelegateCommand(SendComment, CanSendComment);
+			Name = "";
+			NewComment = "";			
 		}
 		
-		private void SendComment()
+		private async void SendComment()
 		{
+			var service = new CookbookService();
+			bool res = await service.PostCommentAsync(Recipe.Id, Name, NewComment);
+			Recipe = await service.GetRecipeAsync(Recipe.Id);
+			Name = String.Empty;
+			NewComment = String.Empty;
+		}
+
+		private bool CanSendComment()
+		{
+			if (!Name.Equals("") && !NewComment.Equals(""))
+				return true;
+			return false;
 		}
 
 		public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)

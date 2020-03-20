@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Data.Json;
+using Windows.Services.Maps;
 
 namespace Cookbook.Services
 {
@@ -23,6 +25,15 @@ namespace Cookbook.Services
             }
         }
 
+        private async Task<HttpResponseMessage> PostAsync(Uri uri, HttpContent content)
+        {
+            using (var client = new HttpClient())
+            {
+                var response = await client.PostAsync(uri, content);
+                return response;
+            }
+        }
+
         public async Task<List<RecipeGroup>> GetRecipeGroupsAsync()
         {
             return await GetAsync<List<RecipeGroup>>(new Uri(serverUrl, "api/Recipes/Groups"));
@@ -33,5 +44,15 @@ namespace Cookbook.Services
             return await GetAsync<Recipe>(new Uri(serverUrl, $"api/Recipes/{id}"));
         }
 
+        public async Task<bool> PostCommentAsync(int id, String name, String newComment)
+        {
+            NewComment comment = new NewComment();
+            comment.Email = name;
+            comment.Text = newComment;
+            string json = JsonConvert.SerializeObject(comment);
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await PostAsync(new Uri(serverUrl, $"api/Recipes/{id}/Comments"), stringContent);
+            return response.IsSuccessStatusCode;
+        }
     }
 }
