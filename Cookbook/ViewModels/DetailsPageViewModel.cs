@@ -55,7 +55,7 @@ namespace Cookbook.ViewModels
 		private async void SendComment()
 		{
 			var service = new CookbookService();
-			bool res = await service.PostCommentAsync(Recipe.Id, Name, NewComment);
+			await service.PostCommentAsync(Recipe.Id, Name, NewComment);
 			Recipe = await service.GetRecipeAsync(Recipe.Id);
 			Name = String.Empty;
 			NewComment = String.Empty;
