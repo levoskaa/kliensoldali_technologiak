@@ -1,0 +1,1 @@
+D:\Projektek\Kliensoldali_technologiak\3. gyakorlat - XAML MVVM\Cookbook\Cookbook\Cookbook.csproj;x86
