@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:renderers="clr-namespace:W9HL9H.Renderers;assembly=W9HL9H"
              x:Class="W9HL9H.AddItemPage"
              Title="Awesome ToDo app">
     
@@ -27,9 +28,9 @@
                BackgroundColor="Blue"
                Text="Új elem hozzáadása"/>
         <Label VerticalOptions="Center" Margin="8" Grid.Row="1" Grid.Column="0" Text="Név: "/>
-        <Editor Margin="8" Grid.Row="1" Grid.Column="1" Text="{Binding Title, Mode=TwoWay}"/>
+        <renderers:CustomEditor Margin="8" Grid.Row="1" Grid.Column="1" Text="{Binding Title, Mode=TwoWay}"/>
         <Label VerticalOptions="Center" Margin="8" Grid.Row="2" Grid.Column="0" Text="Leírás: "/>
-        <Editor Margin="8" Grid.Row="2" Grid.Column="1" Text="{Binding Description, Mode=TwoWay}"/>
+        <renderers:CustomEditor Margin="8" Grid.Row="2" Grid.Column="1" Text="{Binding Description, Mode=TwoWay}"/>
     </Grid>
     
     <ContentPage.ToolbarItems>
