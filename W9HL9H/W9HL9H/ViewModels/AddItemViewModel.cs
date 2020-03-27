@@ -31,6 +31,17 @@ namespace W9HL9H.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private bool isDone;
+        public bool IsDone
+        {
+            get { return isDone; }
+            set
+            {
+                isDone = value;
+                OnPropertyChanged();
+            }
+        }
         public ICommand SaveItemCommand { get; }
         public AddItemViewModel(INavigation navigation) : base(navigation)
         {
@@ -38,7 +49,7 @@ namespace W9HL9H.ViewModels
         }
         private async void AddItemCommandExecute()
         {
-            TodoService.Instance.AddItem(Title, Description);
+            TodoService.Instance.AddItem(Title, Description, IsDone);
             await Navigation.PopAsync(true);
         }
     }

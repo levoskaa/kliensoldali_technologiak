@@ -8,5 +8,6 @@ namespace W9HL9H.Models
     {
         public string Title { get; set; }
         public string Description { get; set; }
+        public bool IsDone { get; set; }
     }
 }

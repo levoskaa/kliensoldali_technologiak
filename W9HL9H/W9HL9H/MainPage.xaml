@@ -20,10 +20,18 @@
                Text="Összes teendő"/>
         <ListView Grid.Row="1" ItemsSource="{Binding Items}">
             <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell Text="{Binding Title}" Detail="{Binding Description}"
-                              TextColor="Blue"
-                              DetailColor="Gray"/>
+                <DataTemplate>                    
+                    <ViewCell>
+                        <StackLayout Orientation="Vertical">
+                            <StackLayout Orientation="Horizontal">
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding Title}" TextColor="Blue"/>
+                                    <Label Text="{Binding Description}" TextColor="Gray"/>
+                                </StackLayout>
+                                <CheckBox IsChecked="{Binding IsDone}"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

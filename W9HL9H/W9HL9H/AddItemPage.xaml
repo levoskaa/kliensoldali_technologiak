@@ -10,6 +10,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -31,6 +32,8 @@
         <renderers:CustomEditor Margin="8" Grid.Row="1" Grid.Column="1" Text="{Binding Title, Mode=TwoWay}"/>
         <Label VerticalOptions="Center" Margin="8" Grid.Row="2" Grid.Column="0" Text="Leírás: "/>
         <renderers:CustomEditor Margin="8" Grid.Row="2" Grid.Column="1" Text="{Binding Description, Mode=TwoWay}"/>
+        <Label VerticalOptions="Center" Margin="8" Grid.Row="3" Grid.Column="0" Text="Kész: "/>
+        <CheckBox Margin="8" Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsDone, Mode=TwoWay}"/>
     </Grid>
     
     <ContentPage.ToolbarItems>
