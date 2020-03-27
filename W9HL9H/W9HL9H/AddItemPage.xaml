@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="W9HL9H.AddItemPage"
+             Title="Awesome ToDo app">
+    
+    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Label VerticalOptions="Start"
+               HeightRequest="150"
+               Grid.ColumnSpan="2"
+               HorizontalOptions="FillAndExpand"
+               HorizontalTextAlignment="Center"
+               VerticalTextAlignment="Center"
+               FontSize="20"
+               FontAttributes="Bold"
+               TextColor="White"
+               BackgroundColor="Blue"
+               Text="Új elem hozzáadása"/>
+        <Label VerticalOptions="Center" Margin="8" Grid.Row="1" Grid.Column="0" Text="Név: "/>
+        <Editor Margin="8" Grid.Row="1" Grid.Column="1" Text="{Binding Title, Mode=TwoWay}"/>
+        <Label VerticalOptions="Center" Margin="8" Grid.Row="2" Grid.Column="0" Text="Leírás: "/>
+        <Editor Margin="8" Grid.Row="2" Grid.Column="1" Text="{Binding Description, Mode=TwoWay}"/>
+    </Grid>
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Mentés" Command="{Binding SaveItemCommand}">
+            <ToolbarItem.Icon>
+                <FileImageSource File="Assets/save.png"/>
+            </ToolbarItem.Icon>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+</ContentPage>

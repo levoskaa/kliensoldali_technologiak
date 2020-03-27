@@ -1,16 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             x:Class="W9HL9H.MainPage">
-
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
-    </StackLayout>
-
+             x:Class="W9HL9H.MainPage"
+             Title="Awesome ToDo app">
+    
+    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label VerticalOptions="Start" HeightRequest="150"
+               HorizontalOptions="FillAndExpand"
+               HorizontalTextAlignment="Center"
+               VerticalTextAlignment="Center"
+               FontSize="20"
+               FontAttributes="Bold"
+               TextColor="White"
+               BackgroundColor="Blue"
+               Text="Összes teendő"/>
+        <ListView Grid.Row="1" ItemsSource="{Binding Items}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Title}" Detail="{Binding Description}"
+                              TextColor="Blue"
+                              DetailColor="Gray"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Hozzáadás" Command="{Binding AddItemCommand}">
+            <ToolbarItem.Icon>
+                <FileImageSource File="Assets/add.png"/>
+            </ToolbarItem.Icon>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
 </ContentPage>

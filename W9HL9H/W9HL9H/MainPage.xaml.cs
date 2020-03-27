@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using W9HL9H.ViewModels;
 using Xamarin.Forms;
 
 namespace W9HL9H
@@ -16,6 +17,13 @@ namespace W9HL9H
         public MainPage()
         {
             InitializeComponent();
+            this.BindingContext = new MainViewModel(Navigation);
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            (this.BindingContext as MainViewModel).OnAppearing();
         }
     }
 }
