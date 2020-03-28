@@ -1,6 +1,7 @@
 import * as $ from "jquery";
 import { Tile, TileState } from "./tile";
 import { Player } from './player';
+import { SaveData } from "./save-data";
 
 export class GameBoard {
     readonly x = 10;
@@ -36,10 +37,35 @@ export class GameBoard {
     }
 
     loadState() {
-        return false;
+        let data = <SaveData> JSON.parse(localStorage.getItem("amoeba-table"));
+        if (!data)
+            return false;
+        if (this.x !== data.x || this.y !== data.y) {
+            localStorage.removeItem("amoeba-table");
+            return false;
+        }
+
+        this.initializeBoard(this.tableElement, this.board = []);
+        for (let i = 0; i < data.x; i++) {
+            for (let j = 0; j < data.y; j++) {
+                this.board[i][j].setState(data.tileStates[i][j]);
+            }
+        }
+        this.playerOne = data.playerOne;
+        this.playerTwo = data.playerTwo;
+        this.currentPlayer = (data.current === 'player-one') ? this.playerOne : this.playerTwo;
+        return true;
     }
 
-    saveState() { }
+    saveState() {
+        localStorage.setItem("amoeba-table", JSON.stringify(<SaveData> {
+            playerOne: this.playerOne,
+            playerTwo: this.playerTwo,
+            x: this.x,
+            y: this.y,
+            tileStates: this.board.map(row => row.map(tile => tile.state))
+        }));
+    }
 
     startGame() {
         if (!this.loadState()) {
@@ -59,6 +85,7 @@ export class GameBoard {
                 this.currentPlayer = this.playerOne;
             }
             this.checkWinner();
+            this.saveState();
         }
     }
 
@@ -93,6 +120,7 @@ export class GameBoard {
         var continueButton = $(".continue-game");
         continueButton.removeAttr("disabled").click(() => {
             continueButton.attr("disabled", "disabled");
+            localStorage.removeItem("amoeba-table");
             this.winner = undefined;
             this.startGame();
         });
