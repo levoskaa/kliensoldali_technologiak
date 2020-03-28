@@ -6,6 +6,7 @@ import { SaveData } from "./save-data";
 export class GameBoard {
     readonly x = 10;
     readonly y = 10;
+    steps: number = 0;
 
     board: Tile[][];
     playerOne = new Player('Player one' , 1);
@@ -69,6 +70,7 @@ export class GameBoard {
 
     startGame() {
         if (!this.loadState()) {
+            this.steps = 0;
             this.initializeBoard(this.tableElement, this.board = []);
             this.currentPlayer = this.winner === this.playerOne ? this.playerTwo : this.playerOne;
         }
@@ -84,9 +86,40 @@ export class GameBoard {
                 tile.setState(TileState.O);
                 this.currentPlayer = this.playerOne;
             }
+            this.steps++;
+            $(".step-number").val(this.steps);
             this.checkWinner();
             this.saveState();
         }
+    }
+
+    onRestartButtonClicked() {
+        localStorage.removeItem("amoeba-table");
+        this.startGame();
+    }
+
+    onClearButtonClicked() {
+        this.playerOne.gamesWon = 0;
+        this.playerTwo.gamesWon = 0;
+        this.onRestartButtonClicked();
+    }
+
+    onChangeNameButtonClicked(evt: JQuery.ClickEvent) {
+        var id = $(evt.target).attr("id");
+        var player = (id[7] === "1") ? this.playerOne : this.playerTwo;
+        var input = $("#player-" + id[7] + "-name-input");
+        player.name = <string> input.val();
+        input.replaceWith(() => "<b class=\"player-name\">" + player.name + "</b>");
+        $("#player-" + id[7] + "-name-button").remove();
+        this.saveState();
+    }
+
+    onPlayerNameDblClicked(evt: JQuery.DoubleClickEvent) {
+        var playerName = $(evt.target).html();
+        var player = (playerName === this.playerOne.name) ? this.playerOne : this.playerTwo;
+        $(evt.target).replaceWith(() => "<input type=\"text\" id=\"player-" + player.id + "-name-input\" value=\"" + player.name + "\" /> \
+                                         <button class=\"change-name\" id=\"player-" + player.id + "-name-button\">Ok</button>");
+        $(".change-name").click((evt) => this.onChangeNameButtonClicked(evt));
     }
 
     checkWinner() {
@@ -117,6 +150,10 @@ export class GameBoard {
     won(player: Player) {
         alert("Player " + player.id + " won! Congrats, " + player.name + "!");
         player.gamesWon++;
+        if (player.id === 1)
+            $(".won-rounds:eq(0)").text(player.gamesWon + " rounds won");
+        else
+            $(".won-rounds:eq(1)").text(player.gamesWon + " rounds won");
         var continueButton = $(".continue-game");
         continueButton.removeAttr("disabled").click(() => {
             continueButton.attr("disabled", "disabled");
@@ -134,5 +171,10 @@ export class GameBoard {
                 tile.element.click(() => this.onTileClicked(tile));
             }
         }
+        var restartButton = $(".restart-current-game");
+        restartButton.click(() => this.onRestartButtonClicked());
+        var clearButton = $(".clear-results");
+        clearButton.click(() => this.onClearButtonClicked());
+        $(".player-name").dblclick((evt) => this.onPlayerNameDblClicked(evt));
     }
 }
