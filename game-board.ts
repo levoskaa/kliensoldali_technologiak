@@ -37,6 +37,14 @@ export class GameBoard {
         }
     }
 
+    displayVariables() {
+        $(".won-rounds:eq(0)").text(this.playerOne.gamesWon + " rounds won");
+        $(".won-rounds:eq(1)").text(this.playerTwo.gamesWon + " rounds won");
+        $(".player-name:eq(0)").text(this.playerOne.name);
+        $(".player-name:eq(1)").text(this.playerTwo.name);
+        $(".step-number").text(this.steps);
+    }
+
     loadState() {
         let data = <SaveData> JSON.parse(localStorage.getItem("amoeba-table"));
         if (!data)
@@ -55,6 +63,7 @@ export class GameBoard {
         this.playerOne = data.playerOne;
         this.playerTwo = data.playerTwo;
         this.currentPlayer = (data.current === 'player-one') ? this.playerOne : this.playerTwo;
+        this.steps = data.steps;
         return true;
     }
 
@@ -62,9 +71,11 @@ export class GameBoard {
         localStorage.setItem("amoeba-table", JSON.stringify(<SaveData> {
             playerOne: this.playerOne,
             playerTwo: this.playerTwo,
+            current: (this.currentPlayer.id === 1) ? "player-one" : "player-two",
             x: this.x,
             y: this.y,
-            tileStates: this.board.map(row => row.map(tile => tile.state))
+            tileStates: this.board.map(row => row.map(tile => tile.state)),
+            steps: this.steps
         }));
     }
 
@@ -74,7 +85,13 @@ export class GameBoard {
             this.initializeBoard(this.tableElement, this.board = []);
             this.currentPlayer = this.winner === this.playerOne ? this.playerTwo : this.playerOne;
         }
+        this.displayVariables();
         this.registerHandlers(this.board);
+    }
+
+    resetBoard() {
+        this.steps = 0;
+        this.initializeBoard(this.tableElement, this.board = []);
     }
 
     onTileClicked(tile: Tile) {
@@ -87,14 +104,16 @@ export class GameBoard {
                 this.currentPlayer = this.playerOne;
             }
             this.steps++;
-            $(".step-number").val(this.steps);
+            $(".step-number").text(this.steps);
             this.checkWinner();
             this.saveState();
         }
     }
 
     onRestartButtonClicked() {
-        localStorage.removeItem("amoeba-table");
+        this.resetBoard();
+        this.saveState();
+        this.displayVariables();
         this.startGame();
     }
 
@@ -110,7 +129,7 @@ export class GameBoard {
         var input = $("#player-" + id[7] + "-name-input");
         player.name = <string> input.val();
         input.replaceWith(() => "<b class=\"player-name\">" + player.name + "</b>");
-        $("#player-" + id[7] + "-name-button").remove();
+        $("#player-" + id[7] + "-name-button").remove();        
         this.saveState();
     }
 
@@ -157,7 +176,8 @@ export class GameBoard {
         var continueButton = $(".continue-game");
         continueButton.removeAttr("disabled").click(() => {
             continueButton.attr("disabled", "disabled");
-            localStorage.removeItem("amoeba-table");
+            this.resetBoard();
+            this.saveState();
             this.winner = undefined;
             this.startGame();
         });
