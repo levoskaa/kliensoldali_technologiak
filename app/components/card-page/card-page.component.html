@@ -20,10 +20,36 @@
     <!-- Here comes the selected or newly created card's editor / detail. -->
     <div class="panel-body">
         <img class="profile-picture pull-right" [src]="selectedCard.imageUrl">
-        <h4 class="text-warning">  
-            {{selectedCard.firstName}} {{selectedCard.lastName}}</h4>
-        <h6 class="text-warning"><b>{{selectedCard.role}}</b> 
-            at <b><a>{{getCompanyName(selectedCard.companyId)}}</a></b></h6>
+        <input class="form-control" 
+               *ngIf="editing" [(ngModel)]="selectedCard.imageUrl">
+        <h4 class="text-warning">{{selectedCard.firstName}} 
+            {{selectedCard.lastName}} 
+            <i class="glyphicon glyphicon-pencil" 
+               (click)="editCard()" *ngIf="!editing"></i></h4>
+        <input class="form-control" 
+               *ngIf="editing" [(ngModel)]="selectedCard.firstName">
+        <input class="form-control" 
+               *ngIf="editing" [(ngModel)]="selectedCard.lastName">
+        <h6 class="text-warning">" 
+            <b>{{selectedCard.role}}</b> at 
+            <b><a>{{getCompanyName(selectedCard.companyId)}}</a></b></h6>
+        <input class="form-control" 
+               *ngIf="editing" [(ngModel)]="selectedCard.role">
+        <select class="form-control" *ngIf="editing" 
+                [(ngModel)]="selectedCard.companyId">
+            <option *ngFor="let company of companies" 
+                    [ngValue]="company.id">{{company.name}}</option>
+        </select>
+
         <p class="text-info">{{selectedCard.motto}}</p>
+        <input class="form-control"
+                *ngIf="editing" [(ngModel)]="selectedCard.motto">
+        <button class="btn btn-default"
+                *ngIf="editing" (click)="saveCard(selectedCard)">Save</button>
+        <button class="btn btn-warning"
+                *ngIf="editing" (click)="cancel()">Cancel</button>
+        <button class="btn btn-danger pull-right" 
+                *ngIf="editing && selectedCard.id" (click)="confirmDelete()">
+                Delete</button>
     </div>
 </div>
