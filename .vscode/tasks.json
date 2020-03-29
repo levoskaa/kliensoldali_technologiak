@@ -1,0 +1,26 @@
+{
+    "version": "0.1.0",
+    "tasks": [
+        {
+            "taskName": "npm serve and watch",
+            "command": "npm",
+            "args": [
+                "start"
+            ],
+            "showOutput": "always",
+            "isBuildCommand": true,
+            "isShellCommand": true,
+            "isBackground": true
+        },
+        {
+            "taskName": "npm install",
+            "command": "npm",
+            "args": [
+                "install"
+            ],
+            "showOutput": "always",
+            "isBuildCommand": false,
+            "isShellCommand": true
+        }
+    ]
+}
