@@ -17,6 +17,9 @@ export class CardPageComponent implements OnInit {
     originalCard: Card;
     editing: boolean = false;
     cards: Observable<SearchResult<Card>>;
+    currentPage: number = 0;
+    maxPages: number = 0;
+    searchTerm: string = "";
 
     constructor(private cardService: CardService, private companyService: CompanyService) { }
 
@@ -26,7 +29,13 @@ export class CardPageComponent implements OnInit {
     }
 
     getCards() {
-        this.cards = this.cardService.getCards();        
+        this.cards = this.cardService.getCards({ 
+            page: this.currentPage, 
+            searchTerm: this.searchTerm });
+        this.cards.subscribe(r => {
+            this.maxPages = Math.ceil(r.allResults / 5);
+            this.currentPage = r.page;
+        });
     }
     
     getCompanyName(id: number) {
@@ -55,7 +64,7 @@ export class CardPageComponent implements OnInit {
         this.selectedCard = this.originalCard;
         this.originalCard = undefined;
     }
-    
+
     confirmDelete() {
         if (confirm(`Are you sure you want to delete card for 
             ${this.selectedCard.firstName} ${this.selectedCard.lastName}?`)) {

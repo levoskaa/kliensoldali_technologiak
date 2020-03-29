@@ -1,6 +1,9 @@
 ﻿<div class="col-lg-5 panel panel-info">
     <div class="panel-body">
-        <input class="form-control" placeholder="Filter cards..." >
+        <input class="form-control" 
+               placeholder="Filter cards..." 
+               [(ngModel)]="searchTerm" 
+               (keyup.enter)="currentPage=0;getCards()">
         <!-- Here comes the list of cards. -->
         <div class="cards-list">
             <a *ngFor="let card of (cards | async)?.results" 
@@ -10,9 +13,19 @@
             </a>
         </div>
         <div class="paging">
-            <button class="col-xs-4 btn btn-info" disabled="disabled"><i class="glyphicon glyphicon-chevron-left"></i></button>
-            <div class="col-xs-4 page-numbers">1/1</div>
-            <button class="col-xs-4 btn btn-info" disabled="disabled"><i class="glyphicon glyphicon-chevron-right"></i></button>
+            <button class="col-xs-4 btn btn-info" 
+                    [disabled]="currentPage <= 0" 
+                    (click)="currentPage=currentPage-1;getCards()">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+            </button>
+            <div class="col-xs-4 page-numbers">
+                {{currentPage + 1}}/{{maxPages}}
+            </div>
+            <button class="col-xs-4 btn btn-info"
+                    [disabled]="currentPage >= maxPages - 1" 
+                    (click)="currentPage=currentPage+1;getCards()">
+                <i class="glyphicon glyphicon-chevron-right"></i>
+            </button>
         </div>
     </div>
 </div>
