@@ -45,7 +45,7 @@
                *ngIf="editing" [(ngModel)]="selectedCard.lastName">
         <h6 class="text-warning">" 
             <b>{{selectedCard.role}}</b> at 
-            <b><a>{{getCompanyName(selectedCard.companyId)}}</a></b></h6>
+            <b><a [routerLink]="['/companies', selectedCard.companyId]" routerLinkActive="active">{{getCompanyName(selectedCard.companyId)}}</a></b></h6>
         <input class="form-control" 
                *ngIf="editing" [(ngModel)]="selectedCard.role">
         <select class="form-control" *ngIf="editing" 

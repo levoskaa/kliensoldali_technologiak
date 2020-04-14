@@ -1,15 +1,16 @@
 ﻿<div class="col-lg-4 panel panel-info company-list">
     <!-- Here comes the list of companies. -->
-    <a><h6>Survey Corps</h6></a>
-    <a><h6>Dog Co.</h6></a>
-    <a class="active"><h6>Jones&amp;Jones</h6></a>
+    <a *ngFor="let company of companies | async"
+        [class.active]="company === selectedCompany" (click)="selectCompany(company)">
+        <h6 class="text-info">{{company.name}}</h6>
+    </a>    
 </div>
-<div class="col-lg-8 panel panel-warning" >
+<div class="col-lg-8 panel panel-warning" *ngIf="selectedCompany">
     <!-- Here comes the selected or newly created company's editor / detail. -->
-    <h4 class="panel-header">Jones&amp;Jones: (1 cards)</h4>
-    <input class="form-control">
-    <button class="btn btn-info">Save</button>
+    <h4 class="panel-header">{{selectedCompany.name}}: ({{getCardCount(selectedCompany.id)}} cards)</h4>
+    <input class="form-control" [(ngModel)]="selectedCompany.name">
+    <button class="btn btn-info" (click)="saveCompany(selectedCompany)">Save</button>
 </div>
 <div class="col-lg-8 panel panel-warning">
-    <button class="btn btn-info">Create company</button>
+    <button class="btn btn-info" (click)="createCompany(selectedCompany)">Create company</button>
 </div>
